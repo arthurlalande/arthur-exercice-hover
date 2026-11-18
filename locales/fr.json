@@ -366,6 +366,7 @@
       "announcement_bar": "Barre d’annonces"
     },
     "quick_add_drawer": {
+      "heading": "Ajout rapide",
       "add_label": "Ajouter au panier : {{ title }}",
       "open_label": "Ajout rapide : {{ title }}",
       "notify_label": "Me prévenir : {{ title }}"

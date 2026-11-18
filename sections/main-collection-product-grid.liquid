@@ -18,6 +18,7 @@
 {%- if section.settings.quick_add == 'drawer' -%}
   {{ 'component-quick-add-drawer.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-add-drawer.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- if section.settings.quick_add == 'bulk' -%}

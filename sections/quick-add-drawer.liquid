@@ -1,0 +1,35 @@
+{% comment %}
+  Drawer d'ajout rapide d'un produit. La section n'est placée dans aucun template :
+  le bouton de la card la demande via la Section Rendering API, dans le contexte du produit
+  (/products/<handle>?section_id=quick-add-drawer).
+{% endcomment %}
+
+{%- if product.available -%}
+  <quick-add-drawer class="quick-add-drawer">
+    <div
+      class="quick-add-drawer__panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="QuickAddDrawerHeading"
+      tabindex="-1"
+    >
+      <div class="quick-add-drawer__header">
+        <h2 class="quick-add-drawer__heading" id="QuickAddDrawerHeading">
+          {{- 'sections.quick_add_drawer.heading' | t -}}
+        </h2>
+        <button
+          type="button"
+          class="quick-add-drawer__close"
+          id="ModalClose-quick-add-drawer"
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-close-thick.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+
+      <div class="quick-add-drawer__body"></div>
+    </div>
+  </quick-add-drawer>
+{%- endif -%}
