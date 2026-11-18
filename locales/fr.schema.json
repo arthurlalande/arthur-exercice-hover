@@ -237,6 +237,10 @@
     "quick_add_drawer": {
       "name": "Tiroir d'ajout rapide",
       "settings": {
+        "color_option_names": {
+          "label": "Noms de l'option couleur",
+          "info": "Les options de produit portant l'un de ces noms s'affichent comme un sélecteur de couleur. Séparez les noms par des virgules."
+        },
         "description_length": {
           "label": "Longueur de la description",
           "info": "Nombre de mots de la description du produit affichés dans le tiroir. 0 pour la masquer."

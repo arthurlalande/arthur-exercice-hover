@@ -1456,6 +1456,13 @@
     "name": "t:settings_schema.quick_add_drawer.name",
     "settings": [
       {
+        "type": "text",
+        "id": "quick_add_color_option_names",
+        "default": "Color, Colour, Couleur",
+        "label": "t:settings_schema.quick_add_drawer.settings.color_option_names.label",
+        "info": "t:settings_schema.quick_add_drawer.settings.color_option_names.info"
+      },
+      {
         "type": "range",
         "id": "quick_add_description_length",
         "min": 0,

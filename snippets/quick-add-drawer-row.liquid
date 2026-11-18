@@ -1,0 +1,57 @@
+{% doc %}
+  Affiche une ligne de variante du drawer d'ajout rapide.
+  Une variante disponible est un formulaire qui l'ajoute au panier. Une variante en rupture affiche seulement son statut.
+
+  @param {variant} variant - La variante de la ligne.
+  @param {product} product - Le produit auquel appartient la variante.
+  @param {number} [skipped_option_position] - Position d'une option absente du libellé, car choisie ailleurs (la couleur).
+
+  @example
+  {% render 'quick-add-drawer-row', variant: variant, product: product, skipped_option_position: 1 %}
+{% enddoc %}
+
+{%- liquid
+  assign label = ''
+  for option_value in variant.options
+    unless forloop.index == skipped_option_position
+      assign label = label | append: ' / ' | append: option_value
+    endunless
+  endfor
+  assign label = label | remove_first: ' / '
+
+  if label == blank or product.has_only_default_variant
+    assign label = 'products.product.add_to_cart' | t
+  endif
+-%}
+
+{%- if variant.available -%}
+  {%- assign form_id = 'QuickAddForm-' | append: variant.id -%}
+  <li class="quick-add-drawer__row">
+    <product-form class="quick-add-drawer__form">
+      {%- form 'product', product, id: form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        <input type="hidden" name="id" value="{{ variant.id }}">
+        <button type="submit" name="add" class="quick-add-drawer__add">
+          <span class="quick-add-drawer__label">{{ label | escape }}</span>
+          <span class="quick-add-drawer__status">
+            {{- 'products.product.inventory_in_stock' | t -}}
+          </span>
+        </button>
+        {%- render 'loading-spinner' -%}
+      {%- endform -%}
+
+      <div class="product-form__error-message-wrapper" role="alert" hidden>
+        <span class="svg-wrapper">
+          {{- 'icon-error.svg' | inline_asset_content -}}
+        </span>
+        <span class="product-form__error-message"></span>
+      </div>
+    </product-form>
+  </li>
+{%- else -%}
+  <li class="quick-add-drawer__row quick-add-drawer__row--sold-out">
+    <span class="quick-add-drawer__label">{{ label | escape }}</span>
+    <span class="quick-add-drawer__status">
+      {{- 'products.product.sold_out' | t -}}
+    </span>
+  </li>
+{%- endif -%}

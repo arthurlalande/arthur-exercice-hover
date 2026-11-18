@@ -323,6 +323,10 @@
     "quick_add_drawer": {
       "name": "Quick add drawer",
       "settings": {
+        "color_option_names": {
+          "label": "Color option names",
+          "info": "Product options with one of these names are shown as a color selector. Separate names with commas."
+        },
         "description_length": {
           "label": "Description length",
           "info": "Number of words of the product description shown in the drawer. Set to 0 to hide it."

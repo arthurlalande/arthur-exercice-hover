@@ -263,6 +263,9 @@
   flex-direction: column;
   gap: 2rem;
   min-height: 0;
+  /* Absorbe la marge basse négative de la liste de variantes, qui créait 7,5px de scroll inutile */
+  margin-bottom: -0.75rem;
+  padding-bottom: 0.75rem;
   overflow-y: auto;
   /* Arrivé en bout de liste, le scroll n'est pas transmis à la page */
   overscroll-behavior: contain;
@@ -315,6 +318,140 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 1.3rem;
+}
+
+.quick-add-drawer__separator {
+  flex: none;
+  height: 0.1rem;
+  margin: 0;
+  border: 0;
+  background-color: rgba(var(--color-foreground), 0.05);
+}
+
+/* Sélecteur de couleur */
+.quick-add-drawer__colors {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.quick-add-drawer__legend {
+  margin-bottom: 1rem;
+  padding: 0;
+  font-size: 1.3rem;
+  letter-spacing: 0.025em;
+}
+
+.quick-add-drawer__color-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.quick-add-drawer__color {
+  padding: 0.8rem 2rem;
+  border: 0.1rem solid rgb(var(--color-foreground));
+  border-radius: 10rem;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.quick-add-drawer__color--unavailable {
+  border-color: rgba(var(--color-foreground), 0.5);
+  color: rgba(var(--color-foreground), 0.5);
+  text-decoration: line-through;
+}
+
+/* Bordure conservée sur la pastille sélectionnée (absente de la maquette), ton sur ton, pour éviter un saut de 2px */
+.quick-add-drawer__color-input:checked + .quick-add-drawer__color {
+  border-color: rgb(var(--color-button));
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+}
+
+.quick-add-drawer__color-input:focus-visible + .quick-add-drawer__color {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.3rem;
+}
+
+/* Lignes de variantes */
+.quick-add-drawer__variants {
+  display: flex;
+  flex-direction: column;
+  /* Lignes de 18px espacées de 15px : l'écart est un padding dans chaque ligne, toute la bande est donc cliquable */
+  margin: -0.75rem 0;
+}
+
+.quick-add-drawer__variants[hidden] {
+  display: none;
+}
+
+.quick-add-drawer__form {
+  position: relative;
+  display: block;
+}
+
+.quick-add-drawer__add,
+.quick-add-drawer__row--sold-out {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.75rem 0;
+  line-height: 1.8rem;
+  letter-spacing: 0.02em;
+}
+
+.quick-add-drawer__add {
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.quick-add-drawer__label {
+  font-size: 1.4rem;
+  text-decoration: underline;
+}
+
+.quick-add-drawer__status {
+  font-size: 1.3rem;
+}
+
+.quick-add-drawer__row--sold-out {
+  color: rgba(var(--color-foreground), 0.5);
+}
+
+.quick-add-drawer__row--sold-out .quick-add-drawer__label {
+  text-decoration: line-through;
+}
+
+.quick-add-drawer__add.loading .quick-add-drawer__status {
+  visibility: hidden;
+}
+
+.quick-add-drawer__form .loading__spinner {
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.quick-add-drawer .product-form__error-message-wrapper:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.75rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+}
+
+@media (hover: hover) {
+  .quick-add-drawer__add:hover .quick-add-drawer__label {
+    text-decoration-thickness: 0.2rem;
+  }
 }
 
 @media screen and (min-width: 750px) {

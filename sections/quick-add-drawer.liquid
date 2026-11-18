@@ -7,6 +7,39 @@
 {%- if product.available -%}
   {%- liquid
     assign title_font = settings.type_header_font | font_modify: 'weight', '600'
+
+    # Noms comparés sans espaces et entourés de virgules, pour ne faire correspondre que des noms d'option entiers.
+    assign color_option_names = settings.quick_add_color_option_names | downcase | remove: ' ' | prepend: ',' | append: ','
+    assign color_option = null
+    for option in product.options_with_values
+      assign option_name = option.name | downcase | remove: ' ' | prepend: ',' | append: ','
+      if color_option_names contains option_name
+        assign color_option = option
+        break
+      endif
+    endfor
+
+    if color_option
+      assign color_key = 'option' | append: color_option.position
+      assign selected_color = product.selected_or_first_available_variant[color_key]
+    endif
+
+    # Le titre nomme l'option listée dans les lignes quand il n'y en a qu'une : la couleur si c'est la seule option.
+    assign heading = 'sections.quick_add_drawer.heading' | t
+    unless product.has_only_default_variant
+      assign listed_option_count = 0
+      assign listed_option_name = color_option.name
+      for option in product.options_with_values
+        unless option.position == color_option.position
+          assign listed_option_count = listed_option_count | plus: 1
+          assign listed_option_name = option.name
+        endunless
+      endfor
+      if listed_option_count < 2
+        assign listed_option_name = listed_option_name | downcase
+        assign heading = 'sections.quick_add_drawer.heading_with_option' | t: option: listed_option_name
+      endif
+    endunless
   -%}
 
   {%- style -%}
@@ -23,7 +56,7 @@
     >
       <div class="quick-add-drawer__header">
         <h2 class="quick-add-drawer__heading" id="QuickAddDrawerHeading">
-          {{- 'sections.quick_add_drawer.heading' | t -}}
+          {{- heading -}}
         </h2>
         <button
           type="button"
@@ -69,6 +102,71 @@
             {% render 'price', product: product, show_badges: true %}
           </div>
         </div>
+
+        {%- if color_option -%}
+          <hr class="quick-add-drawer__separator">
+
+          <fieldset class="quick-add-drawer__colors">
+            <legend class="quick-add-drawer__legend">{{ color_option.name | escape }}</legend>
+            <div class="quick-add-drawer__color-list">
+              {%- for value in color_option.values -%}
+                {%- liquid
+                  assign color_variants = product.variants | where: color_key, value.name
+                  assign available_color_variants = color_variants | where: 'available'
+                -%}
+                <input
+                  type="radio"
+                  class="quick-add-drawer__color-input visually-hidden"
+                  name="quick-add-color"
+                  id="QuickAddColor-{{ forloop.index }}"
+                  value="{{ value.name | escape }}"
+                  {% if value.name == selected_color %}
+                    checked
+                  {% endif %}
+                >
+                <label
+                  for="QuickAddColor-{{ forloop.index }}"
+                  class="quick-add-drawer__color{% if available_color_variants.size == 0 %} quick-add-drawer__color--unavailable{% endif %}"
+                >
+                  {{- value.name | escape -}}
+                  {%- if available_color_variants.size == 0 -%}
+                    <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
+                  {%- endif -%}
+                </label>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endif -%}
+
+        <hr class="quick-add-drawer__separator">
+
+        {%- if color_option -%}
+          {%- for value in color_option.values -%}
+            {%- assign color_variants = product.variants | where: color_key, value.name -%}
+            <ul
+              class="quick-add-drawer__variants list-unstyled"
+              role="list"
+              data-color="{{ value.name | escape }}"
+              {% unless value.name == selected_color %}
+                hidden
+              {% endunless %}
+            >
+              {%- for variant in color_variants -%}
+                {% render 'quick-add-drawer-row',
+                  variant: variant,
+                  product: product,
+                  skipped_option_position: color_option.position
+                %}
+              {%- endfor -%}
+            </ul>
+          {%- endfor -%}
+        {%- else -%}
+          <ul class="quick-add-drawer__variants list-unstyled" role="list">
+            {%- for variant in product.variants -%}
+              {% render 'quick-add-drawer-row', variant: variant, product: product %}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
       </div>
     </div>
   </quick-add-drawer>

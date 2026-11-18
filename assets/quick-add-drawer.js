@@ -55,10 +55,45 @@ if (!customElements.get('quick-add-drawer')) {
   customElements.define(
     'quick-add-drawer',
     class QuickAddDrawer extends ModalDialog {
+      constructor() {
+        super();
+
+        this.addEventListener('change', this.onColorChange.bind(this));
+      }
+
+      disconnectedCallback() {
+        this.unsubscribeFromCartUpdate?.();
+      }
+
       show(opener) {
         // Drawer tout juste inséré : lire une propriété de layout fige son état fermé, et la transition peut se jouer.
         void this.offsetHeight;
         super.show(opener);
+
+        this.unsubscribeFromCartUpdate = subscribe(PUB_SUB_EVENTS.cartUpdate, this.onCartUpdate.bind(this));
+      }
+
+      hide() {
+        this.unsubscribeFromCartUpdate?.();
+        super.hide();
+      }
+
+      onColorChange(event) {
+        if (event.target.name !== 'quick-add-color') return;
+
+        this.querySelectorAll('[data-color]').forEach((variants) => {
+          variants.hidden = variants.dataset.color !== event.target.value;
+        });
+      }
+
+      onCartUpdate(event) {
+        if (event.source !== 'product-form') return;
+
+        // Le panier rend le focus à l'élément actif à l'envoi : une ligne de ce drawer, sur le point d'être masquée.
+        const cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
+        cart?.setActiveElement(this.openedBy);
+
+        this.hide();
       }
     }
   );
