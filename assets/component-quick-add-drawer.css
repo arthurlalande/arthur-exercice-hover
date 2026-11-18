@@ -20,7 +20,7 @@
   }
 }
 
-/* Texte de la card produit */
+/* Texte de la card produit, et prix partagé avec le drawer */
 .collection-quick-add-drawer .card > .card__content .card__information {
   padding: 1.2rem 0 0;
 }
@@ -35,27 +35,32 @@
   margin-top: 1.2rem;
 }
 
-.collection-quick-add-drawer .price {
+.collection-quick-add-drawer .price,
+.quick-add-drawer .price {
   letter-spacing: 0.04em;
   line-height: normal;
 }
 
-.collection-quick-add-drawer .price .price-item {
+.collection-quick-add-drawer .price .price-item,
+.quick-add-drawer .price .price-item {
   margin: 0;
 }
 
-.collection-quick-add-drawer .price--on-sale .price__sale {
+.collection-quick-add-drawer .price--on-sale .price__sale,
+.quick-add-drawer .price--on-sale .price__sale {
   display: flex;
   align-items: center;
   gap: 1.3rem;
 }
 
 /* Dimensionne l'enveloppe du prix barré sur son propre texte, et non sur la ligne du prix principal, plus grand */
-.collection-quick-add-drawer .price--on-sale .price__sale > span {
+.collection-quick-add-drawer .price--on-sale .price__sale > span,
+.quick-add-drawer .price--on-sale .price__sale > span {
   display: flex;
 }
 
-.collection-quick-add-drawer .price--on-sale .price-item--regular {
+.collection-quick-add-drawer .price--on-sale .price-item--regular,
+.quick-add-drawer .price--on-sale .price-item--regular {
   letter-spacing: 0.05em;
 }
 
@@ -83,7 +88,8 @@
   display: flex;
 }
 
-.collection-quick-add-drawer .badge {
+.collection-quick-add-drawer .badge,
+.quick-add-drawer .badge {
   border: 0;
   padding: 0.3rem 1.2rem 0.35rem;
   font-size: 1.3rem;
@@ -262,11 +268,65 @@
   overscroll-behavior: contain;
 }
 
+.quick-add-drawer__product {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.quick-add-drawer__media {
+  flex: none;
+  width: 8.5rem;
+  height: 8.5rem;
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.quick-add-drawer__media img,
+.quick-add-drawer__media .placeholder-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.quick-add-drawer__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.quick-add-drawer__title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: normal;
+}
+
+.quick-add-drawer__description {
+  margin: 0;
+  font-size: 1.3rem;
+  letter-spacing: 0.025em;
+}
+
+.quick-add-drawer .price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.3rem;
+}
+
 @media screen and (min-width: 750px) {
   .quick-add-drawer__panel {
     width: 48rem;
     height: 100%;
     transform: translateX(100%);
+  }
+
+  .quick-add-drawer__media {
+    width: 10.85rem;
+    height: 10.85rem;
   }
 }
 

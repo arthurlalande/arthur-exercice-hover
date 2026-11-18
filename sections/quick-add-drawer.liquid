@@ -5,6 +5,14 @@
 {% endcomment %}
 
 {%- if product.available -%}
+  {%- liquid
+    assign title_font = settings.type_header_font | font_modify: 'weight', '600'
+  -%}
+
+  {%- style -%}
+    {{ title_font | font_face: font_display: 'swap' }}
+  {%- endstyle -%}
+
   <quick-add-drawer class="quick-add-drawer">
     <div
       class="quick-add-drawer__panel"
@@ -29,7 +37,39 @@
         </button>
       </div>
 
-      <div class="quick-add-drawer__body"></div>
+      <div class="quick-add-drawer__body">
+        <div class="quick-add-drawer__product">
+          <div class="quick-add-drawer__media">
+            {%- if product.featured_media -%}
+              {{
+                product.featured_media
+                | image_url: width: 330
+                | image_tag:
+                  widths: '85, 110, 170, 220, 330',
+                  sizes: '(min-width: 750px) 109px, 85px',
+                  alt: product.featured_media.alt,
+                  loading: 'eager'
+              }}
+            {%- else -%}
+              {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+
+          <div class="quick-add-drawer__info">
+            <h3 class="quick-add-drawer__title">
+              <a href="{{ product.url }}" class="full-unstyled-link">{{ product.title | escape }}</a>
+            </h3>
+
+            {%- if settings.quick_add_description_length > 0 and product.description != blank -%}
+              <p class="quick-add-drawer__description">
+                {{- product.description | strip_html | truncatewords: settings.quick_add_description_length -}}
+              </p>
+            {%- endif -%}
+
+            {% render 'price', product: product, show_badges: true %}
+          </div>
+        </div>
+      </div>
     </div>
   </quick-add-drawer>
 {%- endif -%}

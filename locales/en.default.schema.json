@@ -320,6 +320,15 @@
         }
       }
     },
+    "quick_add_drawer": {
+      "name": "Quick add drawer",
+      "settings": {
+        "description_length": {
+          "label": "Description length",
+          "info": "Number of words of the product description shown in the drawer. Set to 0 to hide it."
+        }
+      }
+    },
     "cart": {
       "name": "Cart",
       "settings": {

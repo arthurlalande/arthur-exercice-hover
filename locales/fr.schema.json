@@ -234,6 +234,15 @@
     "drawers": {
       "name": "Tiroirs"
     },
+    "quick_add_drawer": {
+      "name": "Tiroir d'ajout rapide",
+      "settings": {
+        "description_length": {
+          "label": "Longueur de la description",
+          "info": "Nombre de mots de la description du produit affichés dans le tiroir. 0 pour la masquer."
+        }
+      }
+    },
     "cart": {
       "name": "Panier",
       "settings": {
