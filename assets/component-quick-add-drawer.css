@@ -148,6 +148,8 @@
 }
 
 .quick-add-opener .loading__spinner {
+  /* En inline-block, la boîte prend la hauteur de ligne et le SVG reste en haut : le spinner paraissait décalé */
+  display: flex;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -462,6 +464,7 @@
 }
 
 .quick-add-drawer__form .loading__spinner {
+  display: flex;
   top: 50%;
   right: 0;
   transform: translateY(-50%);
