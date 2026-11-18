@@ -365,6 +365,11 @@
       "announcement": "Annonce",
       "announcement_bar": "Barre d’annonces"
     },
+    "quick_add_drawer": {
+      "add_label": "Ajouter au panier : {{ title }}",
+      "open_label": "Ajout rapide : {{ title }}",
+      "notify_label": "Me prévenir : {{ title }}"
+    },
     "quick_order_list": {
       "product_total": "Sous-total des produits",
       "view_cart": "Voir le panier",

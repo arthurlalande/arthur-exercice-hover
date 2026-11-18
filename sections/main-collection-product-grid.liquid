@@ -15,6 +15,11 @@
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
+{%- if section.settings.quick_add == 'drawer' -%}
+  {{ 'component-quick-add-drawer.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
 {%- if section.settings.quick_add == 'bulk' -%}
   <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
@@ -143,7 +148,7 @@
             </div>
           {%- else -%}
             <div
-              class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+              class="collection{% if section.settings.quick_add == 'drawer' %} collection-quick-add-drawer{% endif %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
             >
               <div class="loading-overlay gradient"></div>
               <ul
@@ -346,6 +351,10 @@
         {
           "value": "bulk",
           "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
+        },
+        {
+          "value": "drawer",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_4"
         }
       ]
     },

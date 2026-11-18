@@ -1,0 +1,172 @@
+/* Grille produits : gouttières et largeur de la maquette, que les réglages de grille du thème ne permettent pas */
+.collection-quick-add-drawer {
+  --grid-mobile-horizontal-spacing: 1rem;
+  --grid-mobile-vertical-spacing: 2rem;
+  --grid-desktop-horizontal-spacing: 1rem;
+  --grid-desktop-vertical-spacing: 2rem;
+}
+
+.collection-quick-add-drawer .product-grid {
+  max-width: 105rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media screen and (max-width: 749px) {
+  .collection-quick-add-drawer.page-width,
+  .collection-quick-add-drawer slider-component.page-width {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Texte de la card produit */
+.collection-quick-add-drawer .card > .card__content .card__information {
+  padding: 1.2rem 0 0;
+}
+
+.collection-quick-add-drawer .card__heading {
+  font-size: 1.3rem;
+  letter-spacing: 0.025em;
+}
+
+/* Même spécificité que la règle de la card qui espace le prix de l'élément précédent */
+.collection-quick-add-drawer .card__content .card__information .card-information > .price {
+  margin-top: 1.2rem;
+}
+
+.collection-quick-add-drawer .price {
+  letter-spacing: 0.04em;
+  line-height: normal;
+}
+
+.collection-quick-add-drawer .price .price-item {
+  margin: 0;
+}
+
+.collection-quick-add-drawer .price--on-sale .price__sale {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+}
+
+/* Dimensionne l'enveloppe du prix barré sur son propre texte, et non sur la ligne du prix principal, plus grand */
+.collection-quick-add-drawer .price--on-sale .price__sale > span {
+  display: flex;
+}
+
+.collection-quick-add-drawer .price--on-sale .price-item--regular {
+  letter-spacing: 0.05em;
+}
+
+@media screen and (max-width: 749px) {
+  .collection-quick-add-drawer .price--on-sale .price__sale {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .collection-quick-add-drawer .card > .card__content .card__information {
+    padding-top: 2rem;
+  }
+
+  .collection-quick-add-drawer .card__content .card__information .card-information > .price {
+    margin-top: 0.8rem;
+  }
+}
+
+/* Tags */
+.collection-quick-add-drawer .card__badge {
+  /* Supprime l'espace de ligne qui remontait le tag de 2px */
+  display: flex;
+}
+
+.collection-quick-add-drawer .badge {
+  border: 0;
+  padding: 0.3rem 1.2rem 0.35rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+  line-height: normal;
+}
+
+/* Bouton de la card */
+.quick-add-opener {
+  --quick-add-button-size: 2.6rem;
+
+  position: absolute;
+  top: 0;
+  right: calc(var(--image-padding) + 1rem);
+  /* Au-dessus du lien couvrant la card ; hors de la zone image, qui forme son propre contexte d'empilement */
+  z-index: 2;
+  display: flex;
+  /* Marge en % calculée sur la largeur de la card : hauteur de l'image, moins le bouton et son décalage de 10px */
+  margin-top: calc(var(--ratio-percent) - var(--image-padding) - 1rem - var(--quick-add-button-size));
+}
+
+.quick-add-button {
+  --quick-add-button-background: #fff;
+  --quick-add-button-border: #f9f9f9;
+  --quick-add-button-icon: #272937;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--quick-add-button-size);
+  height: var(--quick-add-button-size);
+  padding: 0;
+  border: 0.1rem solid var(--quick-add-button-border);
+  border-radius: 50%;
+  background-color: var(--quick-add-button-background);
+  color: var(--quick-add-button-icon);
+  cursor: pointer;
+  transition: background-color var(--duration-default) ease, border-color var(--duration-default) ease,
+    color var(--duration-default) ease;
+}
+
+/* Étend la zone tactile à 44px sans changer la taille visible */
+.quick-add-button::after {
+  content: '';
+  position: absolute;
+  inset: -0.9rem;
+}
+
+.quick-add-button .svg-wrapper {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.quick-add-button.loading .svg-wrapper {
+  visibility: hidden;
+}
+
+.quick-add-opener .loading__spinner {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+@media screen and (min-width: 750px) {
+  .quick-add-opener {
+    --quick-add-button-size: 3.8rem;
+  }
+
+  .quick-add-button::after {
+    content: none;
+  }
+
+  .quick-add-button .svg-wrapper {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+@media (hover: hover) {
+  .quick-add-button:not(.loading):hover {
+    --quick-add-button-background: #272937;
+    --quick-add-button-border: #20222e;
+    --quick-add-button-icon: #fff;
+  }
+}

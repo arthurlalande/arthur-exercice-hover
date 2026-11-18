@@ -1828,7 +1828,8 @@
           "options": {
             "option_1": "None",
             "option_2": "Standard",
-            "option_3": "Bulk"
+            "option_3": "Bulk",
+            "option_4": "Drawer"
           }
         },
         "columns_mobile": {

@@ -1533,7 +1533,8 @@
           "options": {
             "option_1": "Aucun",
             "option_2": "Standard",
-            "option_3": "En gros"
+            "option_3": "En gros",
+            "option_4": "Tiroir"
           }
         }
       }

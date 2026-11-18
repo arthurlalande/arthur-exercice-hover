@@ -1,0 +1,56 @@
+{% doc %}
+  Affiche le bouton rond d'ajout rapide, posé sur l'image d'une card produit.
+  Il ajoute directement au panier un produit à variante unique disponible, car le drawer n'aurait rien à faire choisir.
+  Sinon, il ouvre le drawer d'ajout rapide quand le produit est disponible, et la pop-up Notify me quand il est en rupture.
+
+  @param {product} product - Le produit concerné par le bouton.
+
+  @example
+  {% render 'quick-add-button', product: card_product %}
+{% enddoc %}
+
+{%- liquid
+  # Mêmes conditions que l'ajout rapide standard de Dawn : une règle de quantité (B2B) impose de passer par un choix.
+  assign variant = product.selected_or_first_available_variant
+  assign direct_add = false
+  if product.available and product.variants_count == 1
+    if variant.quantity_rule.min <= 1 and variant.quantity_rule.max == null and variant.quantity_rule.increment <= 1
+      assign direct_add = true
+    endif
+  endif
+
+  if direct_add
+    assign icon = 'icon-plus-thin.svg'
+    assign label = 'sections.quick_add_drawer.add_label' | t: title: product.title
+  elsif product.available
+    assign icon = 'icon-plus-thin.svg'
+    assign label = 'sections.quick_add_drawer.open_label' | t: title: product.title
+  else
+    assign icon = 'icon-bell.svg'
+    assign label = 'sections.quick_add_drawer.notify_label' | t: title: product.title
+  endif
+-%}
+
+{%- if direct_add -%}
+  {%- assign form_id = 'QuickAddCardForm-' | append: section.id | append: '-' | append: product.id -%}
+  <product-form class="quick-add-opener">
+    {%- form 'product', product, id: form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+      <input type="hidden" name="id" value="{{ variant.id }}">
+      <button type="submit" name="add" class="quick-add-button" aria-label="{{ label }}">
+        <span class="svg-wrapper">
+          {{- icon | inline_asset_content -}}
+        </span>
+      </button>
+    {%- endform -%}
+    {%- render 'loading-spinner' -%}
+  </product-form>
+{%- else -%}
+  <quick-add-opener class="quick-add-opener" data-product-url="{{ product.url }}">
+    <button type="button" class="quick-add-button" aria-label="{{ label }}" aria-haspopup="dialog">
+      <span class="svg-wrapper">
+        {{- icon | inline_asset_content -}}
+      </span>
+    </button>
+    {%- render 'loading-spinner' -%}
+  </quick-add-opener>
+{%- endif -%}

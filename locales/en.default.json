@@ -356,6 +356,11 @@
     "page": {
       "title": "Page title"
     },
+    "quick_add_drawer": {
+      "add_label": "Add to cart: {{ title }}",
+      "open_label": "Quick add: {{ title }}",
+      "notify_label": "Notify me: {{ title }}"
+    },
     "quick_order_list": {
       "product_total": "Product subtotal",
       "view_cart": "View cart",
