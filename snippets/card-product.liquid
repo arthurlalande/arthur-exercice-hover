@@ -10,7 +10,7 @@
   @param {boolean} [extend_height] - Whether the card fills its available container space. Defaults to `false`.
   @param {boolean} [lazy_load] - Whether to lazy-load product images. Defaults to `true`.
   @param {boolean} [skip_styles] - Whether to omit the component styles. Defaults to `false`.
-  @param {string} [quick_add] - The quick-add behavior. Allowed values are `none`, `standard`, and `bulk`. Defaults to `none`.
+  @param {string} [quick_add] - The quick-add behavior. Allowed values are `none`, `standard`, `bulk`, and `drawer`. Defaults to `none`.
   @param {string} [section_id] - The section ID used to namespace card and quick-add element IDs.
   @param {boolean} [horizontal_class] - Whether to add the `card--horizontal` class. Defaults to `false`.
   @param {boolean} [horizontal_quick_add] - Whether to use horizontal quick-add styles. Defaults to `false`.
@@ -551,6 +551,8 @@
                 </modal-dialog>
               </div>
             {% endif %}
+          {% elsif quick_add == 'drawer' %}
+            {% render 'quick-add-button', product: card_product %}
           {% endif %}
           <div class="card__badge {{ settings.badge_position }}">
             {%- if card_product.available == false -%}

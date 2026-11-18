@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "settings_schema": {
     "global": {
@@ -317,6 +326,33 @@
         "paragraph": "Cart and checkout prices always show currency codes",
         "currency_code_enabled": {
           "label": "Currency codes"
+        }
+      }
+    },
+    "quick_add_drawer": {
+      "name": "Quick add drawer",
+      "settings": {
+        "low_stock_threshold": {
+          "label": "Low stock threshold",
+          "info": "A variant with fewer units than this shows how many are left."
+        },
+        "color_option_names": {
+          "label": "Color option names",
+          "info": "Product options with one of these names are shown as a color selector. Separate names with commas."
+        },
+        "description_length": {
+          "label": "Description length",
+          "info": "Number of words of the product description shown in the drawer. Set to 0 to hide it."
+        },
+        "header__notify_me": {
+          "content": "Notify me pop-up"
+        },
+        "notify_text": {
+          "label": "Text",
+          "info": "Leave blank to use the default text, translated in every language of the store."
+        },
+        "notify_success": {
+          "label": "Success message"
         }
       }
     },
@@ -1828,7 +1864,8 @@
           "options": {
             "option_1": "None",
             "option_2": "Standard",
-            "option_3": "Bulk"
+            "option_3": "Bulk",
+            "option_4": "Drawer"
           }
         },
         "columns_mobile": {

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "settings_schema": {
     "colors": {
@@ -233,6 +242,33 @@
     },
     "drawers": {
       "name": "Tiroirs"
+    },
+    "quick_add_drawer": {
+      "name": "Tiroir d'ajout rapide",
+      "settings": {
+        "low_stock_threshold": {
+          "label": "Seuil de stock faible",
+          "info": "Une variante dont le stock est inférieur à ce seuil affiche le nombre d'unités restantes."
+        },
+        "color_option_names": {
+          "label": "Noms de l'option couleur",
+          "info": "Les options de produit portant l'un de ces noms s'affichent comme un sélecteur de couleur. Séparez les noms par des virgules."
+        },
+        "description_length": {
+          "label": "Longueur de la description",
+          "info": "Nombre de mots de la description du produit affichés dans le tiroir. 0 pour la masquer."
+        },
+        "header__notify_me": {
+          "content": "Pop-up « Me prévenir »"
+        },
+        "notify_text": {
+          "label": "Texte",
+          "info": "Laissez vide pour utiliser le texte par défaut, traduit dans toutes les langues de la boutique."
+        },
+        "notify_success": {
+          "label": "Message de confirmation"
+        }
+      }
     },
     "cart": {
       "name": "Panier",
@@ -1533,7 +1569,8 @@
           "options": {
             "option_1": "Aucun",
             "option_2": "Standard",
-            "option_3": "En gros"
+            "option_3": "En gros",
+            "option_4": "Tiroir"
           }
         }
       }

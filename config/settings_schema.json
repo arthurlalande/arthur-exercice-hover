@@ -1453,6 +1453,54 @@
     ]
   },
   {
+    "name": "t:settings_schema.quick_add_drawer.name",
+    "settings": [
+      {
+        "type": "range",
+        "id": "quick_add_low_stock_threshold",
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "default": 10,
+        "label": "t:settings_schema.quick_add_drawer.settings.low_stock_threshold.label",
+        "info": "t:settings_schema.quick_add_drawer.settings.low_stock_threshold.info"
+      },
+      {
+        "type": "text",
+        "id": "quick_add_color_option_names",
+        "default": "Color, Colour, Couleur",
+        "label": "t:settings_schema.quick_add_drawer.settings.color_option_names.label",
+        "info": "t:settings_schema.quick_add_drawer.settings.color_option_names.info"
+      },
+      {
+        "type": "range",
+        "id": "quick_add_description_length",
+        "min": 0,
+        "max": 60,
+        "step": 5,
+        "default": 30,
+        "label": "t:settings_schema.quick_add_drawer.settings.description_length.label",
+        "info": "t:settings_schema.quick_add_drawer.settings.description_length.info"
+      },
+      {
+        "type": "header",
+        "content": "t:settings_schema.quick_add_drawer.settings.header__notify_me.content"
+      },
+      {
+        "type": "textarea",
+        "id": "quick_add_notify_text",
+        "label": "t:settings_schema.quick_add_drawer.settings.notify_text.label",
+        "info": "t:settings_schema.quick_add_drawer.settings.notify_text.info"
+      },
+      {
+        "type": "text",
+        "id": "quick_add_notify_success",
+        "label": "t:settings_schema.quick_add_drawer.settings.notify_success.label",
+        "info": "t:settings_schema.quick_add_drawer.settings.notify_text.info"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.customer_accounts.name",
     "settings": [
       {

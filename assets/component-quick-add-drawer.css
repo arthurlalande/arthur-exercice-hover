@@ -1,0 +1,704 @@
+/* Grille produits : gouttières et largeur de la maquette, que les réglages de grille du thème ne permettent pas */
+.collection-quick-add-drawer {
+  --grid-mobile-horizontal-spacing: 1rem;
+  --grid-mobile-vertical-spacing: 2rem;
+  --grid-desktop-horizontal-spacing: 1rem;
+  --grid-desktop-vertical-spacing: 2rem;
+}
+
+.collection-quick-add-drawer .product-grid {
+  max-width: 105rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media screen and (max-width: 749px) {
+  .collection-quick-add-drawer.page-width,
+  .collection-quick-add-drawer slider-component.page-width {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Texte de la card produit, et prix partagé avec le drawer */
+.collection-quick-add-drawer .card > .card__content .card__information {
+  padding: 1.2rem 0 0;
+}
+
+.collection-quick-add-drawer .card__heading {
+  font-size: 1.3rem;
+  letter-spacing: 0.025em;
+}
+
+/* Même spécificité que la règle de la card qui espace le prix de l'élément précédent */
+.collection-quick-add-drawer .card__content .card__information .card-information > .price {
+  margin-top: 1.2rem;
+}
+
+.collection-quick-add-drawer .price,
+.quick-add-drawer .price {
+  letter-spacing: 0.04em;
+  line-height: normal;
+}
+
+.collection-quick-add-drawer .price .price-item,
+.quick-add-drawer .price .price-item {
+  margin: 0;
+}
+
+.collection-quick-add-drawer .price--on-sale .price__sale,
+.quick-add-drawer .price--on-sale .price__sale {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+}
+
+/* Dimensionne l'enveloppe du prix barré sur son propre texte, et non sur la ligne du prix principal, plus grand */
+.collection-quick-add-drawer .price--on-sale .price__sale > span,
+.quick-add-drawer .price--on-sale .price__sale > span {
+  display: flex;
+}
+
+.collection-quick-add-drawer .price--on-sale .price-item--regular,
+.quick-add-drawer .price--on-sale .price-item--regular {
+  letter-spacing: 0.05em;
+}
+
+@media screen and (max-width: 749px) {
+  .collection-quick-add-drawer .price--on-sale .price__sale {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .collection-quick-add-drawer .card > .card__content .card__information {
+    padding-top: 2rem;
+  }
+
+  .collection-quick-add-drawer .card__content .card__information .card-information > .price {
+    margin-top: 0.8rem;
+  }
+}
+
+/* Tags */
+.collection-quick-add-drawer .card__badge {
+  /* Supprime l'espace de ligne qui remontait le tag de 2px */
+  display: flex;
+}
+
+.collection-quick-add-drawer .badge,
+.quick-add-drawer .badge {
+  border: 0;
+  padding: 0.3rem 1.2rem 0.35rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+  line-height: normal;
+}
+
+/* Bouton de la card */
+.quick-add-opener {
+  --quick-add-button-size: 2.6rem;
+
+  position: absolute;
+  top: 0;
+  right: calc(var(--image-padding) + 1rem);
+  /* Au-dessus du lien couvrant la card ; hors de la zone image, qui forme son propre contexte d'empilement */
+  z-index: 2;
+  display: flex;
+  /* Marge en % calculée sur la largeur de la card : hauteur de l'image, moins le bouton et son décalage de 10px */
+  margin-top: calc(var(--ratio-percent) - var(--image-padding) - 1rem - var(--quick-add-button-size));
+}
+
+.quick-add-button {
+  --quick-add-button-background: #fff;
+  --quick-add-button-border: #f9f9f9;
+  --quick-add-button-icon: #272937;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--quick-add-button-size);
+  height: var(--quick-add-button-size);
+  padding: 0;
+  border: 0.1rem solid var(--quick-add-button-border);
+  border-radius: 50%;
+  background-color: var(--quick-add-button-background);
+  color: var(--quick-add-button-icon);
+  cursor: pointer;
+  transition: background-color var(--duration-default) ease, border-color var(--duration-default) ease,
+    color var(--duration-default) ease;
+}
+
+/* Étend la zone tactile à 44px sans changer la taille visible */
+.quick-add-button::after {
+  content: '';
+  position: absolute;
+  inset: -0.9rem;
+}
+
+.quick-add-button .svg-wrapper {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.quick-add-button.loading .svg-wrapper {
+  visibility: hidden;
+}
+
+.quick-add-opener .loading__spinner {
+  /* En inline-block, la boîte prend la hauteur de ligne et le SVG reste en haut : le spinner paraissait décalé */
+  display: flex;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+@media screen and (min-width: 750px) {
+  .quick-add-opener {
+    --quick-add-button-size: 3.8rem;
+  }
+
+  .quick-add-button::after {
+    content: none;
+  }
+
+  .quick-add-button .svg-wrapper {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+@media (hover: hover) {
+  .quick-add-button:not(.loading):hover {
+    --quick-add-button-background: #272937;
+    --quick-add-button-border: #20222e;
+    --quick-add-button-icon: #fff;
+  }
+}
+
+/* Drawer */
+.quick-add-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 101;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(var(--color-foreground), 0.25);
+  visibility: hidden;
+  opacity: 0;
+  /* Mobile : aucun geste de scroll hors du body, qui reste scrollable car c'est son propre conteneur de scroll */
+  touch-action: none;
+  /* Masqué seulement une fois le fondu de fermeture terminé */
+  transition: opacity var(--duration-default) ease, visibility 0s var(--duration-default);
+}
+
+.quick-add-drawer[open] {
+  visibility: visible;
+  opacity: 1;
+  /* Visible dès l'ouverture : ModalDialog donne le focus aussitôt, et un élément masqué ne peut pas le recevoir */
+  transition-delay: 0s;
+}
+
+.quick-add-drawer__panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  width: 100%;
+  /* Panneau bas : la maquette laisse visible une bande de page de 147px au-dessus */
+  height: calc(100vh - 14.7rem);
+  height: calc(100dvh - 14.7rem);
+  padding: 2rem;
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  line-height: normal;
+  transform: translateY(100%);
+  transition: transform var(--duration-default) ease;
+}
+
+.quick-add-drawer[open] .quick-add-drawer__panel {
+  transform: none;
+}
+
+.quick-add-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quick-add-drawer__heading {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  line-height: normal;
+}
+
+.quick-add-drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  /* Garde une zone de clic de 44px tout en alignant l'icône de 14px sur le padding du panneau */
+  margin: -1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.quick-add-drawer__close .svg-wrapper {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.quick-add-drawer__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-height: 0;
+  /* Absorbe la marge basse négative de la liste de variantes, qui créait 7,5px de scroll inutile */
+  margin-bottom: -0.75rem;
+  padding-bottom: 0.75rem;
+  overflow-y: auto;
+  /* Arrivé en bout de liste, le scroll n'est pas transmis à la page */
+  overscroll-behavior: contain;
+}
+
+.quick-add-drawer__product {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.quick-add-drawer__media {
+  flex: none;
+  width: 8.5rem;
+  height: 8.5rem;
+  background-color: rgba(var(--color-foreground), 0.04);
+}
+
+.quick-add-drawer__media img,
+.quick-add-drawer__media .placeholder-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.quick-add-drawer__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.quick-add-drawer__title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: normal;
+}
+
+.quick-add-drawer__description {
+  margin: 0;
+  font-size: 1.3rem;
+  letter-spacing: 0.025em;
+}
+
+.quick-add-drawer .price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.3rem;
+}
+
+.quick-add-drawer__separator {
+  flex: none;
+  height: 0.1rem;
+  margin: 0;
+  border: 0;
+  background-color: rgba(var(--color-foreground), 0.05);
+}
+
+/* Sélecteur de couleur */
+.quick-add-drawer__colors {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.quick-add-drawer__legend {
+  margin-bottom: 1rem;
+  padding: 0;
+  font-size: 1.3rem;
+  letter-spacing: 0.025em;
+}
+
+.quick-add-drawer__color-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.quick-add-drawer__color {
+  padding: 0.8rem 2rem;
+  border: 0.1rem solid rgb(var(--color-foreground));
+  border-radius: 10rem;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.quick-add-drawer__color--unavailable {
+  border-color: rgba(var(--color-foreground), 0.5);
+  color: rgba(var(--color-foreground), 0.5);
+  text-decoration: line-through;
+}
+
+/* Bordure conservée sur la pastille sélectionnée (absente de la maquette), ton sur ton, pour éviter un saut de 2px */
+.quick-add-drawer__color-input:checked + .quick-add-drawer__color {
+  border-color: rgb(var(--color-button));
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+}
+
+.quick-add-drawer__color-input:focus-visible + .quick-add-drawer__color {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  outline-offset: 0.3rem;
+}
+
+/* Lignes de variantes */
+.quick-add-drawer__variants {
+  display: flex;
+  flex-direction: column;
+  /* Lignes de 18px espacées de 15px : l'écart est un padding dans chaque ligne, toute la bande est donc cliquable */
+  margin: -0.75rem 0;
+}
+
+.quick-add-drawer__variants[hidden] {
+  display: none;
+}
+
+.quick-add-drawer__form {
+  position: relative;
+  display: block;
+}
+
+.quick-add-drawer__add,
+.quick-add-drawer__row--sold-out {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.75rem 0;
+  line-height: 1.8rem;
+  letter-spacing: 0.02em;
+}
+
+.quick-add-drawer__add {
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.quick-add-drawer__label {
+  font-size: 1.4rem;
+  text-decoration: underline;
+}
+
+.quick-add-drawer__status {
+  font-size: 1.3rem;
+}
+
+.quick-add-drawer__row--sold-out {
+  color: rgba(var(--color-foreground), 0.5);
+}
+
+.quick-add-drawer__row--sold-out .quick-add-drawer__label {
+  text-decoration: line-through;
+}
+
+.quick-add-drawer__row--sold-out .quick-add-drawer__status,
+.quick-add-drawer__notify {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quick-add-drawer__notify {
+  /* Même bande cliquable que la ligne */
+  margin: -0.75rem 0;
+  padding: 0.75rem 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+
+.quick-add-drawer__notify .svg-wrapper {
+  width: 1.3rem;
+  height: 1.4rem;
+}
+
+.quick-add-drawer__notify-label {
+  text-decoration: underline;
+}
+
+.quick-add-drawer__add.loading .quick-add-drawer__status {
+  visibility: hidden;
+}
+
+.quick-add-drawer__form .loading__spinner {
+  display: flex;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  /* Le carré du SVG en rotation dépasse du bord droit par ses coins, ce qui faisait défiler le drawer en horizontal */
+  overflow: hidden;
+}
+
+.quick-add-drawer .product-form__error-message-wrapper:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.75rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+}
+
+@media (hover: hover) {
+  .quick-add-drawer__add:hover .quick-add-drawer__label {
+    text-decoration-thickness: 0.2rem;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .quick-add-drawer__panel {
+    width: 48rem;
+    height: 100%;
+    transform: translateX(100%);
+  }
+
+  .quick-add-drawer__media {
+    width: 10.85rem;
+    height: 10.85rem;
+  }
+}
+
+/* Pop-up Notify me */
+.notify-me {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* Au-dessus du drawer, qui reste ouvert en dessous */
+  z-index: 102;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(var(--color-foreground), 0.25);
+  visibility: hidden;
+  opacity: 0;
+  /* Masqué seulement une fois le fondu de fermeture terminé */
+  transition: opacity var(--duration-default) ease, visibility 0s var(--duration-default);
+}
+
+.notify-me[open] {
+  visibility: visible;
+  opacity: 1;
+  /* Visible dès l'ouverture : ModalDialog donne le focus aussitôt, et un élément masqué ne peut pas le recevoir */
+  transition-delay: 0s;
+}
+
+.notify-me__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 35rem;
+  max-width: calc(100% - 2rem);
+  max-height: calc(100% - 2rem);
+  padding: 5rem;
+  overflow-y: auto;
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  font-size: 1.3rem;
+  letter-spacing: 0.025em;
+  line-height: normal;
+}
+
+.notify-me__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.notify-me__close .svg-wrapper {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.notify-me__header,
+.notify-me__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.notify-me__header {
+  gap: 0.5rem;
+}
+
+.notify-me__form {
+  gap: 1rem;
+}
+
+.notify-me__form[hidden] {
+  display: none;
+}
+
+.notify-me__title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: normal;
+}
+
+.notify-me__text {
+  margin: 0;
+}
+
+.notify-me__field,
+.notify-me__submit {
+  width: 100%;
+  height: 3.9rem;
+  /* Pas de padding vertical : la hauteur fixe centre le texte, et les 16px du mobile seraient rognés sinon */
+  padding: 0 1.5rem;
+  border-radius: 0;
+  font-family: inherit;
+  letter-spacing: inherit;
+}
+
+.notify-me__field {
+  border: 0.1rem solid rgba(var(--color-foreground), 0.25);
+  background-color: transparent;
+  color: inherit;
+  /* 16px évite le zoom d'iOS au focus ; la taille de la maquette s'applique à partir du breakpoint tablette */
+  font-size: 1.6rem;
+  appearance: none;
+}
+
+/* Remplace l'anneau de focus du thème, qui déborde du champ et chevauche ses voisins */
+.notify-me__field:focus-visible {
+  outline: 0.2rem solid rgb(var(--color-foreground));
+  outline-offset: -0.2rem;
+  box-shadow: none;
+}
+
+.notify-me__field::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+.notify-me__select {
+  position: relative;
+}
+
+.notify-me__select .svg-wrapper {
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  width: 1rem;
+  height: 0.6rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.notify-me__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  border: 0;
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+  font-size: inherit;
+  cursor: pointer;
+  transition: background-color var(--duration-default) ease;
+}
+
+.notify-me__submit .svg-wrapper {
+  width: 1rem;
+  height: 1.08rem;
+}
+
+.notify-me__message {
+  margin: 0;
+}
+
+.notify-me__message:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.notify-me__message .svg-wrapper {
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+#NotifyMeError {
+  margin-top: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .notify-me__content {
+    width: 41.5rem;
+  }
+
+  .notify-me__field {
+    font-size: inherit;
+  }
+}
+
+@media (hover: hover) {
+  /* Même ton sombre que le bouton de la card au survol */
+  .notify-me__submit:hover {
+    background-color: #272937;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quick-add-drawer,
+  .quick-add-drawer__panel,
+  .notify-me {
+    transition: none;
+  }
+}

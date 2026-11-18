@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "password_page": {
@@ -355,6 +364,23 @@
     },
     "page": {
       "title": "Page title"
+    },
+    "quick_add_drawer": {
+      "heading": "Quick add",
+      "heading_with_option": "Select my {{ option }}",
+      "low_stock": "Low stock : {{ quantity }} left",
+      "add_label": "Add to cart: {{ title }}",
+      "open_label": "Quick add: {{ title }}",
+      "notify_label": "Notify me: {{ title }}",
+      "notify_me": {
+        "open": "Notify me",
+        "text": "Register to receive a notification when this item comes back in stock.",
+        "variant_label": "Variant",
+        "email_label": "Email",
+        "submit": "Notify me when available",
+        "error": "Enter a valid email address.",
+        "success": "Thank you! We will email you when this item is back in stock."
+      }
     },
     "quick_order_list": {
       "product_total": "Product subtotal",

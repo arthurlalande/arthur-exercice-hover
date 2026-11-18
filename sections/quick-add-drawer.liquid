@@ -1,0 +1,264 @@
+{% comment %}
+  Drawer d'ajout rapide et pop-up Notify me d'un produit. La section n'est placée dans aucun template :
+  le bouton de la card la demande via la Section Rendering API, dans le contexte du produit
+  (/products/<handle>?section_id=quick-add-drawer).
+  Le drawer est rendu quand le produit est achetable, la pop-up quand au moins une variante est en rupture.
+{% endcomment %}
+
+{%- liquid
+  assign title_font = settings.type_header_font | font_modify: 'weight', '600'
+  assign available_variants = product.variants | where: 'available'
+-%}
+
+{%- style -%}
+  {{ title_font | font_face: font_display: 'swap' }}
+{%- endstyle -%}
+
+{%- if product.available -%}
+  {%- liquid
+    # Noms comparés sans espaces et entourés de virgules, pour ne faire correspondre que des noms d'option entiers.
+    assign color_option_names = settings.quick_add_color_option_names | downcase | remove: ' ' | prepend: ',' | append: ','
+    assign color_option = null
+    for option in product.options_with_values
+      assign option_name = option.name | downcase | remove: ' ' | prepend: ',' | append: ','
+      if color_option_names contains option_name
+        assign color_option = option
+        break
+      endif
+    endfor
+
+    if color_option
+      assign color_key = 'option' | append: color_option.position
+      assign selected_color = product.selected_or_first_available_variant[color_key]
+    endif
+
+    # Le titre nomme l'option listée dans les lignes quand il n'y en a qu'une : la couleur si c'est la seule option.
+    assign heading = 'sections.quick_add_drawer.heading' | t
+    unless product.has_only_default_variant
+      assign listed_option_count = 0
+      assign listed_option_name = color_option.name
+      for option in product.options_with_values
+        unless option.position == color_option.position
+          assign listed_option_count = listed_option_count | plus: 1
+          assign listed_option_name = option.name
+        endunless
+      endfor
+      if listed_option_count < 2
+        assign listed_option_name = listed_option_name | downcase
+        assign heading = 'sections.quick_add_drawer.heading_with_option' | t: option: listed_option_name
+      endif
+    endunless
+  -%}
+
+  <quick-add-drawer class="quick-add-drawer">
+    <div
+      class="quick-add-drawer__panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="QuickAddDrawerHeading"
+      tabindex="-1"
+    >
+      <div class="quick-add-drawer__header">
+        <h2 class="quick-add-drawer__heading" id="QuickAddDrawerHeading">
+          {{- heading -}}
+        </h2>
+        <button
+          type="button"
+          class="quick-add-drawer__close"
+          id="ModalClose-quick-add-drawer"
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-close-thick.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+
+      <div class="quick-add-drawer__body">
+        <div class="quick-add-drawer__product">
+          <div class="quick-add-drawer__media">
+            {%- if product.featured_media -%}
+              {{
+                product.featured_media
+                | image_url: width: 330
+                | image_tag:
+                  widths: '85, 110, 170, 220, 330',
+                  sizes: '(min-width: 750px) 109px, 85px',
+                  alt: product.featured_media.alt,
+                  loading: 'eager'
+              }}
+            {%- else -%}
+              {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+
+          <div class="quick-add-drawer__info">
+            <h3 class="quick-add-drawer__title">
+              <a href="{{ product.url }}" class="full-unstyled-link">{{ product.title | escape }}</a>
+            </h3>
+
+            {%- if settings.quick_add_description_length > 0 and product.description != blank -%}
+              <p class="quick-add-drawer__description">
+                {{- product.description | strip_html | truncatewords: settings.quick_add_description_length -}}
+              </p>
+            {%- endif -%}
+
+            {% render 'price', product: product, show_badges: true %}
+          </div>
+        </div>
+
+        {%- if color_option -%}
+          <hr class="quick-add-drawer__separator">
+
+          <fieldset class="quick-add-drawer__colors">
+            <legend class="quick-add-drawer__legend">{{ color_option.name | escape }}</legend>
+            <div class="quick-add-drawer__color-list">
+              {%- for value in color_option.values -%}
+                {%- liquid
+                  assign color_variants = product.variants | where: color_key, value.name
+                  assign available_color_variants = color_variants | where: 'available'
+                -%}
+                <input
+                  type="radio"
+                  class="quick-add-drawer__color-input visually-hidden"
+                  name="quick-add-color"
+                  id="QuickAddColor-{{ forloop.index }}"
+                  value="{{ value.name | escape }}"
+                  {% if value.name == selected_color %}
+                    checked
+                  {% endif %}
+                >
+                <label
+                  for="QuickAddColor-{{ forloop.index }}"
+                  class="quick-add-drawer__color{% if available_color_variants.size == 0 %} quick-add-drawer__color--unavailable{% endif %}"
+                >
+                  {{- value.name | escape -}}
+                  {%- if available_color_variants.size == 0 -%}
+                    <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
+                  {%- endif -%}
+                </label>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endif -%}
+
+        <hr class="quick-add-drawer__separator">
+
+        {%- if color_option -%}
+          {%- for value in color_option.values -%}
+            {%- assign color_variants = product.variants | where: color_key, value.name -%}
+            <ul
+              class="quick-add-drawer__variants list-unstyled"
+              role="list"
+              data-color="{{ value.name | escape }}"
+              {% unless value.name == selected_color %}
+                hidden
+              {% endunless %}
+            >
+              {%- for variant in color_variants -%}
+                {% render 'quick-add-drawer-row',
+                  variant: variant,
+                  product: product,
+                  skipped_option_position: color_option.position
+                %}
+              {%- endfor -%}
+            </ul>
+          {%- endfor -%}
+        {%- else -%}
+          <ul class="quick-add-drawer__variants list-unstyled" role="list">
+            {%- for variant in product.variants -%}
+              {% render 'quick-add-drawer-row', variant: variant, product: product %}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+  </quick-add-drawer>
+{%- endif -%}
+
+{%- if available_variants.size < product.variants.size -%}
+  {%- liquid
+    assign default_text = 'sections.quick_add_drawer.notify_me.text' | t
+    assign default_success = 'sections.quick_add_drawer.notify_me.success' | t
+  -%}
+
+  <modal-dialog class="notify-me">
+    <div class="notify-me__content" role="dialog" aria-modal="true" aria-labelledby="NotifyMeTitle" tabindex="-1">
+      <button
+        type="button"
+        class="notify-me__close"
+        id="ModalClose-notify-me"
+        aria-label="{{ 'accessibility.close' | t }}"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-close-thick.svg' | inline_asset_content -}}
+        </span>
+      </button>
+
+      <div class="notify-me__header">
+        <h2 class="notify-me__title" id="NotifyMeTitle">{{ product.title | escape }}</h2>
+        <p class="notify-me__text">{{ settings.quick_add_notify_text | default: default_text | escape }}</p>
+      </div>
+
+      <notify-me-form>
+        <form class="notify-me__form" novalidate>
+          {%- if product.has_only_default_variant -%}
+            <input type="hidden" name="variant" value="{{ product.variants.first.id }}">
+          {%- else -%}
+            <div class="notify-me__select">
+              <label class="visually-hidden" for="NotifyMeVariant">
+                {{- 'sections.quick_add_drawer.notify_me.variant_label' | t -}}
+              </label>
+              <select class="notify-me__field" id="NotifyMeVariant" name="variant">
+                {%- for variant in product.variants -%}
+                  {%- unless variant.available -%}
+                    <option value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                  {%- endunless -%}
+                {%- endfor -%}
+              </select>
+              <span class="svg-wrapper">
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </span>
+            </div>
+          {%- endif -%}
+
+          <div>
+            <label class="visually-hidden" for="NotifyMeEmail">
+              {{- 'sections.quick_add_drawer.notify_me.email_label' | t -}}
+            </label>
+            <input
+              type="email"
+              class="notify-me__field"
+              id="NotifyMeEmail"
+              name="email"
+              placeholder="{{ 'sections.quick_add_drawer.notify_me.email_label' | t }}"
+              autocomplete="email"
+              required
+              aria-describedby="NotifyMeError"
+            >
+            <p class="notify-me__message" id="NotifyMeError" hidden>
+              <span class="svg-wrapper">
+                {{- 'icon-error.svg' | inline_asset_content -}}
+              </span>
+              {{ 'sections.quick_add_drawer.notify_me.error' | t }}
+            </p>
+          </div>
+
+          <button type="submit" class="notify-me__submit">
+            <span class="svg-wrapper">
+              {{- 'icon-bell.svg' | inline_asset_content -}}
+            </span>
+            {{ 'sections.quick_add_drawer.notify_me.submit' | t }}
+          </button>
+        </form>
+
+        <p class="notify-me__message notify-me__success" role="status" tabindex="-1" hidden>
+          <span class="svg-wrapper">
+            {{- 'icon-success.svg' | inline_asset_content -}}
+          </span>
+          {{ settings.quick_add_notify_success | default: default_success | escape }}
+        </p>
+      </notify-me-form>
+    </div>
+  </modal-dialog>
+{%- endif -%}
