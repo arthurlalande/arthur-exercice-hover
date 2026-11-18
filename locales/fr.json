@@ -368,6 +368,7 @@
     "quick_add_drawer": {
       "heading": "Ajout rapide",
       "heading_with_option": "Choisir : {{ option }}",
+      "low_stock": "Stock faible : plus que {{ quantity }}",
       "add_label": "Ajouter au panier : {{ title }}",
       "open_label": "Ajout rapide : {{ title }}",
       "notify_label": "Me prévenir : {{ title }}"

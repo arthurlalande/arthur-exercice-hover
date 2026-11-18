@@ -237,6 +237,10 @@
     "quick_add_drawer": {
       "name": "Tiroir d'ajout rapide",
       "settings": {
+        "low_stock_threshold": {
+          "label": "Seuil de stock faible",
+          "info": "Une variante dont le stock est inférieur à ce seuil affiche le nombre d'unités restantes."
+        },
         "color_option_names": {
           "label": "Noms de l'option couleur",
           "info": "Les options de produit portant l'un de ces noms s'affichent comme un sélecteur de couleur. Séparez les noms par des virgules."

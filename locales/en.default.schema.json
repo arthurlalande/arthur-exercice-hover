@@ -323,6 +323,10 @@
     "quick_add_drawer": {
       "name": "Quick add drawer",
       "settings": {
+        "low_stock_threshold": {
+          "label": "Low stock threshold",
+          "info": "A variant with fewer units than this shows how many are left."
+        },
         "color_option_names": {
           "label": "Color option names",
           "info": "Product options with one of these names are shown as a color selector. Separate names with commas."

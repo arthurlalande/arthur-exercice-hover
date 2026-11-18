@@ -22,6 +22,14 @@
   if label == blank or product.has_only_default_variant
     assign label = 'products.product.add_to_cart' | t
   endif
+
+  # Une quantité restante n'a de sens que si Shopify suit le stock et que la vente en rupture est interdite.
+  assign low_stock = false
+  if variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny'
+    if variant.inventory_quantity < settings.quick_add_low_stock_threshold
+      assign low_stock = true
+    endif
+  endif
 -%}
 
 {%- if variant.available -%}
@@ -33,7 +41,11 @@
         <button type="submit" name="add" class="quick-add-drawer__add">
           <span class="quick-add-drawer__label">{{ label | escape }}</span>
           <span class="quick-add-drawer__status">
-            {{- 'products.product.inventory_in_stock' | t -}}
+            {%- if low_stock -%}
+              {{- 'sections.quick_add_drawer.low_stock' | t: quantity: variant.inventory_quantity -}}
+            {%- else -%}
+              {{- 'products.product.inventory_in_stock' | t -}}
+            {%- endif -%}
           </span>
         </button>
         {%- render 'loading-spinner' -%}
