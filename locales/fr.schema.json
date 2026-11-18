@@ -248,6 +248,16 @@
         "description_length": {
           "label": "Longueur de la description",
           "info": "Nombre de mots de la description du produit affichés dans le tiroir. 0 pour la masquer."
+        },
+        "header__notify_me": {
+          "content": "Pop-up « Me prévenir »"
+        },
+        "notify_text": {
+          "label": "Texte",
+          "info": "Laissez vide pour utiliser le texte par défaut, traduit dans toutes les langues de la boutique."
+        },
+        "notify_success": {
+          "label": "Message de confirmation"
         }
       }
     },

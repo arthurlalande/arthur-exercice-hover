@@ -334,6 +334,16 @@
         "description_length": {
           "label": "Description length",
           "info": "Number of words of the product description shown in the drawer. Set to 0 to hide it."
+        },
+        "header__notify_me": {
+          "content": "Notify me pop-up"
+        },
+        "notify_text": {
+          "label": "Text",
+          "info": "Leave blank to use the default text, translated in every language of the store."
+        },
+        "notify_success": {
+          "label": "Success message"
         }
       }
     },

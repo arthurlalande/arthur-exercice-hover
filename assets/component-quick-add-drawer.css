@@ -429,6 +429,34 @@
   text-decoration: line-through;
 }
 
+.quick-add-drawer__row--sold-out .quick-add-drawer__status,
+.quick-add-drawer__notify {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quick-add-drawer__notify {
+  /* Même bande cliquable que la ligne */
+  margin: -0.75rem 0;
+  padding: 0.75rem 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+
+.quick-add-drawer__notify .svg-wrapper {
+  width: 1.3rem;
+  height: 1.4rem;
+}
+
+.quick-add-drawer__notify-label {
+  text-decoration: underline;
+}
+
 .quick-add-drawer__add.loading .quick-add-drawer__status {
   visibility: hidden;
 }
@@ -469,9 +497,205 @@
   }
 }
 
+/* Pop-up Notify me */
+.notify-me {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* Au-dessus du drawer, qui reste ouvert en dessous */
+  z-index: 102;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(var(--color-foreground), 0.25);
+  visibility: hidden;
+  opacity: 0;
+  /* Masqué seulement une fois le fondu de fermeture terminé */
+  transition: opacity var(--duration-default) ease, visibility 0s var(--duration-default);
+}
+
+.notify-me[open] {
+  visibility: visible;
+  opacity: 1;
+  /* Visible dès l'ouverture : ModalDialog donne le focus aussitôt, et un élément masqué ne peut pas le recevoir */
+  transition-delay: 0s;
+}
+
+.notify-me__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 35rem;
+  max-width: calc(100% - 2rem);
+  max-height: calc(100% - 2rem);
+  padding: 5rem;
+  overflow-y: auto;
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-foreground));
+  font-size: 1.3rem;
+  letter-spacing: 0.025em;
+  line-height: normal;
+}
+
+.notify-me__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.notify-me__close .svg-wrapper {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.notify-me__header,
+.notify-me__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.notify-me__header {
+  gap: 0.5rem;
+}
+
+.notify-me__form {
+  gap: 1rem;
+}
+
+.notify-me__form[hidden] {
+  display: none;
+}
+
+.notify-me__title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: normal;
+}
+
+.notify-me__text {
+  margin: 0;
+}
+
+.notify-me__field,
+.notify-me__submit {
+  width: 100%;
+  height: 3.9rem;
+  /* Pas de padding vertical : la hauteur fixe centre le texte, et les 16px du mobile seraient rognés sinon */
+  padding: 0 1.5rem;
+  border-radius: 0;
+  font-family: inherit;
+  letter-spacing: inherit;
+}
+
+.notify-me__field {
+  border: 0.1rem solid rgba(var(--color-foreground), 0.25);
+  background-color: transparent;
+  color: inherit;
+  /* 16px évite le zoom d'iOS au focus ; la taille de la maquette s'applique à partir du breakpoint tablette */
+  font-size: 1.6rem;
+  appearance: none;
+}
+
+/* Remplace l'anneau de focus du thème, qui déborde du champ et chevauche ses voisins */
+.notify-me__field:focus-visible {
+  outline: 0.2rem solid rgb(var(--color-foreground));
+  outline-offset: -0.2rem;
+  box-shadow: none;
+}
+
+.notify-me__field::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+.notify-me__select {
+  position: relative;
+}
+
+.notify-me__select .svg-wrapper {
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  width: 1rem;
+  height: 0.6rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.notify-me__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  border: 0;
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+  font-size: inherit;
+  cursor: pointer;
+  transition: background-color var(--duration-default) ease;
+}
+
+.notify-me__submit .svg-wrapper {
+  width: 1rem;
+  height: 1.08rem;
+}
+
+.notify-me__message {
+  margin: 0;
+}
+
+.notify-me__message:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.notify-me__message .svg-wrapper {
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+#NotifyMeError {
+  margin-top: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .notify-me__content {
+    width: 41.5rem;
+  }
+
+  .notify-me__field {
+    font-size: inherit;
+  }
+}
+
+@media (hover: hover) {
+  /* Même ton sombre que le bouton de la card au survol */
+  .notify-me__submit:hover {
+    background-color: #272937;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .quick-add-drawer,
-  .quick-add-drawer__panel {
+  .quick-add-drawer__panel,
+  .notify-me {
     transition: none;
   }
 }

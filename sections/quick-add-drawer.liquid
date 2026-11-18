@@ -1,13 +1,21 @@
 {% comment %}
-  Drawer d'ajout rapide d'un produit. La section n'est placée dans aucun template :
+  Drawer d'ajout rapide et pop-up Notify me d'un produit. La section n'est placée dans aucun template :
   le bouton de la card la demande via la Section Rendering API, dans le contexte du produit
   (/products/<handle>?section_id=quick-add-drawer).
+  Le drawer est rendu quand le produit est achetable, la pop-up quand au moins une variante est en rupture.
 {% endcomment %}
+
+{%- liquid
+  assign title_font = settings.type_header_font | font_modify: 'weight', '600'
+  assign available_variants = product.variants | where: 'available'
+-%}
+
+{%- style -%}
+  {{ title_font | font_face: font_display: 'swap' }}
+{%- endstyle -%}
 
 {%- if product.available -%}
   {%- liquid
-    assign title_font = settings.type_header_font | font_modify: 'weight', '600'
-
     # Noms comparés sans espaces et entourés de virgules, pour ne faire correspondre que des noms d'option entiers.
     assign color_option_names = settings.quick_add_color_option_names | downcase | remove: ' ' | prepend: ',' | append: ','
     assign color_option = null
@@ -41,10 +49,6 @@
       endif
     endunless
   -%}
-
-  {%- style -%}
-    {{ title_font | font_face: font_display: 'swap' }}
-  {%- endstyle -%}
 
   <quick-add-drawer class="quick-add-drawer">
     <div
@@ -170,4 +174,91 @@
       </div>
     </div>
   </quick-add-drawer>
+{%- endif -%}
+
+{%- if available_variants.size < product.variants.size -%}
+  {%- liquid
+    assign default_text = 'sections.quick_add_drawer.notify_me.text' | t
+    assign default_success = 'sections.quick_add_drawer.notify_me.success' | t
+  -%}
+
+  <modal-dialog class="notify-me">
+    <div class="notify-me__content" role="dialog" aria-modal="true" aria-labelledby="NotifyMeTitle" tabindex="-1">
+      <button
+        type="button"
+        class="notify-me__close"
+        id="ModalClose-notify-me"
+        aria-label="{{ 'accessibility.close' | t }}"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-close-thick.svg' | inline_asset_content -}}
+        </span>
+      </button>
+
+      <div class="notify-me__header">
+        <h2 class="notify-me__title" id="NotifyMeTitle">{{ product.title | escape }}</h2>
+        <p class="notify-me__text">{{ settings.quick_add_notify_text | default: default_text | escape }}</p>
+      </div>
+
+      <notify-me-form>
+        <form class="notify-me__form" novalidate>
+          {%- if product.has_only_default_variant -%}
+            <input type="hidden" name="variant" value="{{ product.variants.first.id }}">
+          {%- else -%}
+            <div class="notify-me__select">
+              <label class="visually-hidden" for="NotifyMeVariant">
+                {{- 'sections.quick_add_drawer.notify_me.variant_label' | t -}}
+              </label>
+              <select class="notify-me__field" id="NotifyMeVariant" name="variant">
+                {%- for variant in product.variants -%}
+                  {%- unless variant.available -%}
+                    <option value="{{ variant.id }}">{{ variant.title | escape }}</option>
+                  {%- endunless -%}
+                {%- endfor -%}
+              </select>
+              <span class="svg-wrapper">
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </span>
+            </div>
+          {%- endif -%}
+
+          <div>
+            <label class="visually-hidden" for="NotifyMeEmail">
+              {{- 'sections.quick_add_drawer.notify_me.email_label' | t -}}
+            </label>
+            <input
+              type="email"
+              class="notify-me__field"
+              id="NotifyMeEmail"
+              name="email"
+              placeholder="{{ 'sections.quick_add_drawer.notify_me.email_label' | t }}"
+              autocomplete="email"
+              required
+              aria-describedby="NotifyMeError"
+            >
+            <p class="notify-me__message" id="NotifyMeError" hidden>
+              <span class="svg-wrapper">
+                {{- 'icon-error.svg' | inline_asset_content -}}
+              </span>
+              {{ 'sections.quick_add_drawer.notify_me.error' | t }}
+            </p>
+          </div>
+
+          <button type="submit" class="notify-me__submit">
+            <span class="svg-wrapper">
+              {{- 'icon-bell.svg' | inline_asset_content -}}
+            </span>
+            {{ 'sections.quick_add_drawer.notify_me.submit' | t }}
+          </button>
+        </form>
+
+        <p class="notify-me__message notify-me__success" role="status" tabindex="-1" hidden>
+          <span class="svg-wrapper">
+            {{- 'icon-success.svg' | inline_asset_content -}}
+          </span>
+          {{ settings.quick_add_notify_success | default: default_success | escape }}
+        </p>
+      </notify-me-form>
+    </div>
+  </modal-dialog>
 {%- endif -%}

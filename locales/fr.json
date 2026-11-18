@@ -371,7 +371,16 @@
       "low_stock": "Stock faible : plus que {{ quantity }}",
       "add_label": "Ajouter au panier : {{ title }}",
       "open_label": "Ajout rapide : {{ title }}",
-      "notify_label": "Me prévenir : {{ title }}"
+      "notify_label": "Me prévenir : {{ title }}",
+      "notify_me": {
+        "open": "Me prévenir",
+        "text": "Inscrivez-vous pour être averti dès que cet article est de nouveau en stock.",
+        "variant_label": "Variante",
+        "email_label": "E-mail",
+        "submit": "Me prévenir du retour en stock",
+        "error": "Saisissez une adresse e-mail valide.",
+        "success": "Merci ! Nous vous écrirons dès que cet article sera de nouveau en stock."
+      }
     },
     "quick_order_list": {
       "product_total": "Sous-total des produits",

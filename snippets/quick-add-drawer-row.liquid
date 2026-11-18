@@ -1,6 +1,6 @@
 {% doc %}
   Affiche une ligne de variante du drawer d'ajout rapide.
-  Une variante disponible est un formulaire qui l'ajoute au panier. Une variante en rupture affiche seulement son statut.
+  Une variante disponible est un formulaire qui l'ajoute au panier. Une variante en rupture ouvre la pop-up Notify me.
 
   @param {variant} variant - La variante de la ligne.
   @param {product} product - Le produit auquel appartient la variante.
@@ -64,6 +64,18 @@
     <span class="quick-add-drawer__label">{{ label | escape }}</span>
     <span class="quick-add-drawer__status">
       {{- 'products.product.sold_out' | t -}}
+      <button
+        type="button"
+        class="quick-add-drawer__notify"
+        data-notify-variant="{{ variant.id }}"
+        aria-label="{{ 'sections.quick_add_drawer.notify_label' | t: title: label }}"
+        aria-haspopup="dialog"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-bell.svg' | inline_asset_content -}}
+        </span>
+        <span class="quick-add-drawer__notify-label">{{ 'sections.quick_add_drawer.notify_me.open' | t }}</span>
+      </button>
     </span>
   </li>
 {%- endif -%}

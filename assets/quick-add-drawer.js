@@ -24,7 +24,9 @@ if (!customElements.get('quick-add-opener')) {
           })
           .then((responseText) => {
             this.renderSection(responseText);
-            document.querySelector('quick-add-drawer').show(this.button);
+            // Un produit en rupture n'a pas de drawer, seulement la pop-up Notify me.
+            const dialog = document.querySelector('quick-add-drawer') || document.querySelector('.notify-me');
+            dialog.show(this.button);
           })
           .catch((error) => {
             console.error(error);
@@ -37,8 +39,10 @@ if (!customElements.get('quick-add-opener')) {
       renderSection(responseText) {
         const section = new DOMParser().parseFromString(responseText, 'text/html').querySelector('.shopify-section');
 
-        // ModalDialog se déplace lui-même dans le body : le drawer précédent vit donc hors de sa section.
-        document.querySelectorAll(`#${section.id}, quick-add-drawer`).forEach((element) => element.remove());
+        // ModalDialog se déplace lui-même dans le body : les dialogues précédents vivent donc hors de leur section.
+        document
+          .querySelectorAll(`#${section.id}, quick-add-drawer, .notify-me`)
+          .forEach((element) => element.remove());
         document.body.appendChild(section);
       }
 
@@ -58,11 +62,13 @@ if (!customElements.get('quick-add-drawer')) {
       constructor() {
         super();
 
+        this.onModalClosed = this.onModalClosed.bind(this);
         this.addEventListener('change', this.onColorChange.bind(this));
+        this.addEventListener('click', this.onNotifyClick.bind(this));
       }
 
       disconnectedCallback() {
-        this.unsubscribeFromCartUpdate?.();
+        this.stopListening();
       }
 
       show(opener) {
@@ -71,11 +77,17 @@ if (!customElements.get('quick-add-drawer')) {
         super.show(opener);
 
         this.unsubscribeFromCartUpdate = subscribe(PUB_SUB_EVENTS.cartUpdate, this.onCartUpdate.bind(this));
+        document.body.addEventListener('modalClosed', this.onModalClosed);
       }
 
       hide() {
-        this.unsubscribeFromCartUpdate?.();
+        this.stopListening();
         super.hide();
+      }
+
+      stopListening() {
+        this.unsubscribeFromCartUpdate?.();
+        document.body.removeEventListener('modalClosed', this.onModalClosed);
       }
 
       onColorChange(event) {
@@ -94,6 +106,78 @@ if (!customElements.get('quick-add-drawer')) {
         cart?.setActiveElement(this.openedBy);
 
         this.hide();
+      }
+
+      onNotifyClick(event) {
+        const trigger = event.target.closest('[data-notify-variant]');
+        if (!trigger) return;
+
+        const popup = document.querySelector('.notify-me');
+        popup.querySelector('notify-me-form').reset(trigger.dataset.notifyVariant);
+        popup.show(trigger);
+      }
+
+      onModalClosed() {
+        // La pop-up s'est fermée au-dessus de ce drawer. ModalDialog a débloqué le scroll de la page et, une fois
+        // cet événement traité, retire le piège à focus : les deux sont rétablis pour le drawer, toujours ouvert.
+        setTimeout(() => {
+          document.body.classList.add('overflow-hidden');
+          trapFocus(this, document.activeElement);
+        });
+      }
+    }
+  );
+}
+
+if (!customElements.get('notify-me-form')) {
+  customElements.define(
+    'notify-me-form',
+    class NotifyMeForm extends HTMLElement {
+      constructor() {
+        super();
+
+        this.form = this.querySelector('form');
+        this.email = this.form.elements.email;
+        this.error = this.querySelector('#NotifyMeError');
+        this.success = this.querySelector('.notify-me__success');
+
+        this.form.addEventListener('submit', this.onSubmit.bind(this));
+        this.email.addEventListener('input', () => this.toggleError(false));
+      }
+
+      reset(variantId) {
+        this.form.reset();
+        this.form.elements.variant.value = variantId;
+        this.form.hidden = false;
+        this.success.hidden = true;
+        this.toggleError(false);
+      }
+
+      onSubmit(event) {
+        event.preventDefault();
+
+        if (!this.email.checkValidity()) {
+          this.toggleError(true);
+          this.email.focus();
+          return;
+        }
+
+        this.subscribe(new FormData(this.form)).then(() => {
+          this.form.hidden = true;
+          this.success.hidden = false;
+          // Les champs du formulaire ont disparu : le piège à focus est reposé sur ce qui reste focalisable.
+          trapFocus(this.closest('modal-dialog'), this.success);
+        });
+      }
+
+      // Aucun service d'alerte de retour en stock n'est branché : la requête est simulée et réussit toujours.
+      subscribe(formData) {
+        return Promise.resolve(formData);
+      }
+
+      toggleError(visible) {
+        this.error.hidden = !visible;
+        this.email.setAttribute('aria-invalid', visible);
       }
     }
   );
