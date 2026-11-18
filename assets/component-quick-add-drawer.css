@@ -437,6 +437,8 @@
   top: 50%;
   right: 0;
   transform: translateY(-50%);
+  /* Le carré du SVG en rotation dépasse du bord droit par ses coins, ce qui faisait défiler le drawer en horizontal */
+  overflow: hidden;
 }
 
 .quick-add-drawer .product-form__error-message-wrapper:not([hidden]) {
